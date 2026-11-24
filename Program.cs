@@ -19,10 +19,16 @@ namespace InventoryManagementSystem
                 Console.WriteLine("6. Exit");
                 Console.Write("Choose an option (1-6): ");
 
-                string choice = Console.ReadLine() ?? "";
+                string choice = (Console.ReadLine() ?? "").Trim();
                 Console.WriteLine();
 
-                switch (choice.Trim())
+                if (choice is "2" or "3" or "4" or "5" && inventory.IsEmpty())
+                {
+                    Console.WriteLine("The inventory is empty. Add a product first.");
+                    continue;
+                }
+
+                switch (choice)
                 {
                     case "1":
                         AddProduct(inventory);
@@ -54,17 +60,12 @@ namespace InventoryManagementSystem
         {
             Console.WriteLine("(Type 'cancel' at any time to go back to the menu.)");
 
-            string name;
+            string? name;
             while (true)
             {
-                Console.Write("Enter product name: ");
-                name = (Console.ReadLine() ?? "").Trim();
+                name = ReadInput("Enter product name: ");
+                if (name == null) return;
 
-                if (name.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (name == "")
                 {
                     Console.WriteLine("Name cannot be empty. Try again.");
@@ -82,14 +83,9 @@ namespace InventoryManagementSystem
             double price;
             while (true)
             {
-                Console.Write("Enter product price: ");
-                string input = (Console.ReadLine() ?? "").Trim();
+                string? input = ReadInput("Enter product price: ");
+                if (input == null) return;
 
-                if (input.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (double.TryParse(input, out price) && price >= 0)
                 {
                     break;
@@ -100,14 +96,9 @@ namespace InventoryManagementSystem
             int quantity;
             while (true)
             {
-                Console.Write("Enter product quantity: ");
-                string input = (Console.ReadLine() ?? "").Trim();
+                string? input = ReadInput("Enter product quantity: ");
+                if (input == null) return;
 
-                if (input.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (int.TryParse(input, out quantity) && quantity >= 0)
                 {
                     break;
@@ -128,41 +119,23 @@ namespace InventoryManagementSystem
 
         static void ViewProducts(Inventory inventory)
         {
-            if (inventory.IsEmpty())
-            {
-                Console.WriteLine("The inventory is empty. Add a product first.");
-                return;
-            }
-
-            List<Product> products = inventory.GetAllProducts();
-
             Console.WriteLine("----- All Products -----");
-            foreach (Product product in products)
+            foreach (Product product in inventory.GetAllProducts())
             {
                 Console.WriteLine(product);
             }
         }
+
         static void EditProduct(Inventory inventory)
         {
-            if (inventory.IsEmpty())
-            {
-                Console.WriteLine("The inventory is empty. Add a product first.");
-                return;
-            }
-
             Console.WriteLine("(Type 'cancel' at any time to go back to the menu.)");
 
             Product? product;
             while (true)
             {
-                Console.Write("Enter the name of the product to edit: ");
-                string name = (Console.ReadLine() ?? "").Trim();
+                string? name = ReadInput("Enter the name of the product to edit: ");
+                if (name == null) return;
 
-                if (name.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (name == "")
                 {
                     Console.WriteLine("Name cannot be empty. Try again.");
@@ -180,17 +153,12 @@ namespace InventoryManagementSystem
             Console.WriteLine($"Current details: {product}");
             Console.WriteLine("Press Enter to keep the current value.");
 
-            string newName;
+            string? newName;
             while (true)
             {
-                Console.Write($"Enter new name for [{product.Name}]: ");
-                newName = (Console.ReadLine() ?? "").Trim();
+                newName = ReadInput($"Enter new name for [{product.Name}]: ");
+                if (newName == null) return;
 
-                if (newName.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (newName == "")
                 {
                     newName = product.Name;
@@ -208,14 +176,9 @@ namespace InventoryManagementSystem
             double newPrice;
             while (true)
             {
-                Console.Write($"Enter new price [{product.Price}]: ");
-                string input = (Console.ReadLine() ?? "").Trim();
+                string? input = ReadInput($"Enter new price [{product.Price}]: ");
+                if (input == null) return;
 
-                if (input.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (input == "")
                 {
                     newPrice = product.Price;
@@ -231,14 +194,9 @@ namespace InventoryManagementSystem
             int newQuantity;
             while (true)
             {
-                Console.Write($"Enter new quantity [{product.Quantity}]: ");
-                string input = (Console.ReadLine() ?? "").Trim();
+                string? input = ReadInput($"Enter new quantity [{product.Quantity}]: ");
+                if (input == null) return;
 
-                if (input.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (input == "")
                 {
                     newQuantity = product.Quantity;
@@ -264,63 +222,39 @@ namespace InventoryManagementSystem
 
         static void DeleteProduct(Inventory inventory)
         {
-            if (inventory.IsEmpty())
-            {
-                Console.WriteLine("The inventory is empty. Add a product first.");
-                return;
-            }
-
             Console.WriteLine("(Type 'cancel' at any time to go back to the menu.)");
 
             while (true)
             {
-                Console.Write("Enter the name of the product to delete: ");
-                string name = (Console.ReadLine() ?? "").Trim();
+                string? name = ReadInput("Enter the name of the product to delete: ");
+                if (name == null) return;
 
-                if (name.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (name == "")
                 {
                     Console.WriteLine("Name cannot be empty. Try again.");
                     continue;
                 }
 
-                try
+                Product? product = inventory.FindProductByName(name);
+                if (product != null)
                 {
-                    inventory.RemoveProduct(name);
+                    inventory.RemoveProduct(product.Name);
                     Console.WriteLine("Product deleted successfully.");
                     return;
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message} Try again.");
-                }
+                Console.WriteLine($"Product '{name}' not found. Try again.");
             }
         }
 
         static void SearchProduct(Inventory inventory)
         {
-            if (inventory.IsEmpty())
-            {
-                Console.WriteLine("The inventory is empty. Add a product first.");
-                return;
-            }
-
             Console.WriteLine("(Type 'cancel' at any time to go back to the menu.)");
 
             while (true)
             {
-                Console.Write("Enter the name of the product to search for: ");
-                string name = (Console.ReadLine() ?? "").Trim();
+                string? name = ReadInput("Enter the name of the product to search for: ");
+                if (name == null) return;
 
-                if (name.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Cancelled. Returning to the main menu.");
-                    return;
-                }
                 if (name == "")
                 {
                     Console.WriteLine("Name cannot be empty. Try again.");
@@ -336,6 +270,19 @@ namespace InventoryManagementSystem
                 }
                 Console.WriteLine($"Product '{name}' not found. Try again.");
             }
+        }
+
+        static string? ReadInput(string prompt)
+        {
+            Console.Write(prompt);
+            string input = (Console.ReadLine() ?? "").Trim();
+
+            if (input.Equals("cancel", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("Cancelled. Returning to the main menu.");
+                return null;
+            }
+            return input;
         }
     }
 }

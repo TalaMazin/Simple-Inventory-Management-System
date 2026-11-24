@@ -2,9 +2,9 @@ namespace InventoryManagementSystem
 {
     public class Product
     {
-        public string Name {get; set;}
-        public double Price {get; set;}
-        public int Quantity {get; set;}
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Quantity { get; set; }
 
         public Product(string name, double price, int quantity)
         {
@@ -17,6 +17,7 @@ namespace InventoryManagementSystem
                 throw new ArgumentException($"Price {price} cannot be negative.");
             }
             if (quantity < 0)
+
             {
                 throw new ArgumentException($"Quantity {quantity} cannot be negative.");
             }

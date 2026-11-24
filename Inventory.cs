@@ -9,16 +9,9 @@ namespace InventoryManagementSystem
             {
                 throw new ArgumentException("Product cannot be null.");
             }
-            if(FindProductByName(product.Name) != null)
+            if (FindProductByName(product.Name) != null)
             {
                 throw new ArgumentException($"Product with name '{product.Name}' already exists in the inventory.");
-            } else if (product.Price < 0)
-            {
-                throw new ArgumentException("Price cannot be negative.");
-            }
-            else if (product.Quantity < 0)
-            {
-                throw new ArgumentException("Quantity cannot be negative.");
             }
             products.Add(product);
         }
@@ -54,12 +47,12 @@ namespace InventoryManagementSystem
             }
             foreach (Product product in products)
             {
-                if(string.Equals(product.Name, name, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(product.Name, name, StringComparison.OrdinalIgnoreCase))
                 {
-                    return product; 
+                    return product;
                 }
             }
-            return null; 
+            return null;
         }
 
         public void UpdateProduct(string name, string newName, double newPrice, int newQuantity)
