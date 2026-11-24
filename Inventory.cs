@@ -41,6 +41,11 @@ namespace InventoryManagementSystem
             return products;
         }
 
+        public bool IsEmpty()
+        {
+            return products.Count == 0;
+        }
+
         public Product? FindProductByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

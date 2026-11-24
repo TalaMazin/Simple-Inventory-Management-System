@@ -128,13 +128,13 @@ namespace InventoryManagementSystem
 
         static void ViewProducts(Inventory inventory)
         {
-            List<Product> products = inventory.GetAllProducts();
-
-            if (products.Count == 0)
+            if (inventory.IsEmpty())
             {
-                Console.WriteLine("The inventory is empty.");
+                Console.WriteLine("The inventory is empty. Add a product first.");
                 return;
             }
+
+            List<Product> products = inventory.GetAllProducts();
 
             Console.WriteLine("----- All Products -----");
             foreach (Product product in products)
@@ -144,6 +144,12 @@ namespace InventoryManagementSystem
         }
         static void EditProduct(Inventory inventory)
         {
+            if (inventory.IsEmpty())
+            {
+                Console.WriteLine("The inventory is empty. Add a product first.");
+                return;
+            }
+
             Console.WriteLine("(Type 'cancel' at any time to go back to the menu.)");
 
             Product? product;
@@ -258,6 +264,12 @@ namespace InventoryManagementSystem
 
         static void DeleteProduct(Inventory inventory)
         {
+            if (inventory.IsEmpty())
+            {
+                Console.WriteLine("The inventory is empty. Add a product first.");
+                return;
+            }
+
             Console.WriteLine("(Type 'cancel' at any time to go back to the menu.)");
 
             while (true)
@@ -291,6 +303,12 @@ namespace InventoryManagementSystem
 
         static void SearchProduct(Inventory inventory)
         {
+            if (inventory.IsEmpty())
+            {
+                Console.WriteLine("The inventory is empty. Add a product first.");
+                return;
+            }
+
             Console.WriteLine("(Type 'cancel' at any time to go back to the menu.)");
 
             while (true)
